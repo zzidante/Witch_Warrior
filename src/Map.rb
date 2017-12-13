@@ -1,3 +1,5 @@
+require './Map_Details/Room.rb'
+
 class Map
 
   attr_reader :map, :show_pretty_map
