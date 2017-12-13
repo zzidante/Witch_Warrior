@@ -1,4 +1,3 @@
-
 class GamePrompt
   def initialize
     @player = ''
@@ -35,6 +34,10 @@ class GamePrompt
     "#{self.txt_br}",        
     "You are a #{@player.type} Witch and have #{@player.health} health.",
     "#{self.txt_br}"        
+  end
+
+  def game_over
+    puts "\nGAME OVER #{@player.name}.\nYou have reached #{@player.health} health.\nBetter luck next time"
   end
 
   def txt_br

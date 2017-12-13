@@ -15,4 +15,11 @@ class Player
     @health > 0
   end
 
+  def is_dead?
+    @health <= 0 ? true : false
+  end
+
+  def takes_damage(dmg = 1, type = nil)
+    @health -= dmg
+  end
 end

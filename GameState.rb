@@ -6,11 +6,24 @@ class GameState
 
   attr_reader :player, :map, :nemesis
 
-  def initialize(user, name, weapon, armor)
-    @player = Player.new(user, name, weapon, armor) # weapon, armor
+  def initialize()
+    @prompts = GamePrompt.new
+    begin_prompts(@prompts)
+
+    @player = Player.new(@user_login, @username, @weapon, @armor)
+    @map = Map.new
     @turn = true
     @nemesis = ['Wood Witch' , 'Elder Flower', 'Vine Viper'].sample
-    @map = Map.new
+
+    #start gameplay
+    play_game(@prompts)
+  end
+
+  def begin_prompts(prompts)
+    @user_login = prompts.get_player_name
+    @username = prompts.get_witch_name
+    @weapon = prompts.get_weapon
+    @armor = prompts.get_armor
   end
 
   def switch_turn
@@ -22,26 +35,22 @@ class GameState
   end
 
   def play_game(game_prompts)
-    @game_prompts = game_prompts
-    @game_prompts.welcome_message(@player)
-    @game_prompts.map_introduction()
-    puts @map.show_pretty_map
+
+    while player.is_alive?
+      @game_prompts = game_prompts
+      @game_prompts.welcome_message(@player)
+      @game_prompts.map_introduction()
+      @map.print_map()
+      @player.takes_damage(50)
+
+      if !player.is_alive?
+        @game_prompts.game_over
+      end
+    end
   end
 end
 
-
-# Start Screen: get player data
-
-reaction = GamePrompt.new
-
-user_login = reaction.get_player_name
-user_name = reaction.get_witch_name
-weapon = reaction.get_weapon
-armor = reaction.get_armor
-
-
 # Begin Game
-game = GameState.new(user_login, user_name, weapon, armor)
-game.play_game(reaction)
+game = GameState.new
 
 
