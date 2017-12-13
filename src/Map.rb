@@ -1,5 +1,3 @@
-require './MoveTest.rb'
-
 class Map
 
   attr_reader :map, :show_pretty_map
@@ -14,7 +12,6 @@ class Map
     @make_map =    make_map()
     @x =           0
     @y =           0
-    @test = MoveTest.new()
   end
 
   private 
@@ -123,10 +120,9 @@ class Map
 end
 
 
-map = Map.new
-puts "You are here" + "\n" + map.show_pretty_map + "\n"
-
-puts map.test_complex_move(["south", "east", "north", "east", "south", "south", "south", "west"])
+# map = Map.new
+# puts "You are here" + "\n" + map.show_pretty_map + "\n"
+# puts map.test_complex_move(["south", "east", "north", "east", "south", "south", "south", "west"])
 
 # puts map.test_simple_move("south")
 

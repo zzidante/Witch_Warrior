@@ -23,6 +23,10 @@ class GamePrompt
     puts "What armor do you wear?"
     gets.chomp!      
   end
+
+  def map_introduction
+    puts "The 'P' is where you are on this map. Every room you encounter will leave an 'x' behind you, every 'O' is a room that is a mystery to you."
+  end
   
   def welcome_message(player)
     @player = player

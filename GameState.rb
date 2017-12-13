@@ -1,6 +1,6 @@
-require './PlayerClass.rb'
-require './GamePrompt.rb'
-require './Map.rb'
+require './src/PlayerClass.rb'
+require './src/GamePrompt.rb'
+require './src/Map.rb'
 
 class GameState
 
@@ -24,6 +24,8 @@ class GameState
   def play_game(game_prompts)
     @game_prompts = game_prompts
     @game_prompts.welcome_message(@player)
+    @game_prompts.map_introduction()
+    puts @map.show_pretty_map
   end
 end
 
