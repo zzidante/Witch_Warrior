@@ -78,9 +78,7 @@ class GameState
     while @player.is_alive?
 
       # Stage 1 - Introduction
-      if @tutorial
-        play_intro
-      end
+      @tutorial && play_intro
 
       # Stage 2A - Movement
       @player.move_room(@map)
