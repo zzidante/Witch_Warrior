@@ -40,8 +40,12 @@ class GameState
     @turn = false
   end
 
-  def opponent_turn_cycle
-    puts "Opponent goes."
+  def opponent_turn_cycle(opponent)
+    if opponent == "monster"
+      puts "Opponent goes."
+    else
+      puts "Nemesis goes"
+    end
     @turn = true
   end
 
@@ -49,15 +53,10 @@ class GameState
     @battle = true
   end 
 
-  def battle_sequence
+  def battle_sequence(opponent)
     if @battle
-      if @turn
-        player_turn_cycle
-        end_game_sequence
-      else
-        opponent_turn_cycle
-        end_game_sequence
-      end   
+      @turn ? player_turn_cycle : opponent_turn_cycle(opponent)
+      end_game_sequence                
     end
   end 
 
@@ -87,7 +86,7 @@ class GameState
       opponent_encounter?
 
       # Stage 2B - Battle Sequence
-      battle_sequence
+      battle_sequence("monster")
     end
   end
 end
