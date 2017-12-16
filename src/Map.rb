@@ -1,28 +1,28 @@
-require './Map_Details/Room.rb'
+require_relative './Room.rb'
 
 class Map
 
+  # include Descriptors
   attr_reader :map, :show_pretty_map
 
-  def initialize()
+  def initialize(player)
+    @player = player
     @player_icon = "[ P ]"
     @empty_icon =  "[ O ]"
     @visited_icon = "[ x ]"
     @map_size =    3
     @map =         []
     @show_pretty_map =  ""
-    @make_map =    make_map()
-    @x =           0
-    @y =           0
+    @make_map =    make_map(@player)
   end
 
   private 
 
-  def make_map
+  def make_map(player)
     @map_size.times do
       @map.push(Array.new(@map_size, @empty_icon))
     end
-    position_player()
+    position_player(player)
   end
 
   def make_pretty_map(map)
@@ -34,31 +34,31 @@ class Map
     return @show_pretty_map
   end
 
-  def position_player(x = 0, y = 0)
-    @map[y][x] = @player_icon
+  def position_player(player)
+    @map[player.y][player.x] = @player_icon
     make_pretty_map(@map)
   end
 
-  def reset_player_position(x, y)
-    @map[y][x] = @visited_icon
+  def reset_player_position(player)
+    @map[player.y][player.x] = @visited_icon
   end
 
-  def valid_move?(axis, step)
+  def valid_move?(player, axis, step)
     if axis == "x"
-      if @x + step < 0 || @x + step > @map_size - 1
+      if player.x + step < 0 || player.x + step > @map_size - 1
         invalid_move_message()
         return false
       else
-        reset_player_position(@x, @y)        
+        reset_player_position(player)        
         return true
       end
     end
     if axis == "y"
-      if @y + step < 0 || @y + step > @map_size - 1
+      if player.y + step < 0 || player.y + step > @map_size - 1
         invalid_move_message()
         return false
       else
-        reset_player_position(@x, @y)
+        reset_player_position(player)
         return true
       end
     end
@@ -74,61 +74,62 @@ class Map
     puts @show_pretty_map
   end
 
-  def valid_directions
+  def name_valid_directions(player)
     valid_direction = []
-    if @y == 0 
+    if player.y == 0 
       valid_direction.push("South")
-    elsif @y == @map_size - 1
+    elsif player.y == @map_size - 1
       valid_direction.push("North")
     else
       valid_direction.push("North", "South")
     end
-    if @x == 0
+    if player.x == 0
       valid_direction.push("East")
-    elsif @x == @map_size - 1
+    elsif player.x == @map_size - 1
       valid_direction.push("West")
     else 
       valid_direction.push("East", "West")
     end
-    return valid_direction
+    return valid_direction.join(", ")
   end
 
-  def move_player(direction)
+  def move_player(player, direction)
     case direction
     when "left", "west"
-      valid_move?("x", -1) ? @x -= 1 : (return invalid_move_message())
+      valid_move?(player, "x", -1) ? player.x -= 1 : (return invalid_move_message())
 
     when "right", "east"
-      valid_move?("x", 1) ? @x += 1 : (return invalid_move_message()) 
+      valid_move?(player, "x", 1) ? player.x += 1 : (return invalid_move_message()) 
 
     when "north", "up", "top"
-      valid_move?("y", -1) ? @y -= 1 : (return invalid_move_message())
+      valid_move?(player, "y", -1) ? player.y -= 1 : (return invalid_move_message())
 
     when "south", "down", "bottom"
-      valid_move?("y", 1) ? @y += 1 : (return invalid_move_message())
+      valid_move?(player, "y", 1) ? player.y += 1 : (return invalid_move_message())
     end
-    position_player(@x, @y)
+    position_player(player)
   end
 
-  def test_simple_move(direction)
-    return move_player(direction), valid_directions.join(", ") + "\n"
+  def test_simple_move(player, direction)
+    return move_player(player, direction), name_valid_directions(player).join(", ") + "\n"
   end
 
-  def test_complex_move(arr_directions)
+  def test_complex_move(player, arr_directions)
     map_collection = ""
     arr_directions.each do |dir|
       map_collection += dir.upcase() + ": " + "\n"
-      map_collection += move_player(dir)
-      map_collection += valid_directions.join(", ") + "\n" + "\n"
+      map_collection += move_player(player, dir)
+      map_collection += name_valid_directions(player) + "\n" + "\n"
     end
     return map_collection + "\n"
   end
+
 end
 
+# For Testing
 
 # map = Map.new
 # puts "You are here" + "\n" + map.show_pretty_map + "\n"
 # puts map.test_complex_move(["south", "east", "north", "east", "south", "south", "south", "west"])
-
 # puts map.test_simple_move("south")
 

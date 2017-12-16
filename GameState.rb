@@ -1,51 +1,95 @@
-require './src/PlayerClass.rb'
+require './src/Player.rb'
 require './src/GamePrompt.rb'
 require './src/Map.rb'
 
 class GameState
+  @@PLAY_SESSIONS = []
 
-  attr_reader :player, :map, :nemesis
+  attr_reader :player, :map
 
   def initialize()
+    @@PLAY_SESSIONS << self
     @prompts = GamePrompt.new
-    begin_prompts(@prompts)
-
-    @player = Player.new(@user_login, @username, @weapon, @armor)
-    @map = Map.new
+    @player = Player.new(@prompts.get_player_info)
+    @map = Map.new(@player)
+    @tutorial = true
     @turn = true
-    @nemesis = ['Wood Witch' , 'Elder Flower', 'Vine Viper'].sample
-
+    @battle = false
     #start gameplay
-    play_game(@prompts)
+    play_game()
   end
 
-  def begin_prompts(prompts)
-    @user_login = prompts.get_player_name
-    @username = prompts.get_witch_name
-    @weapon = prompts.get_weapon
-    @armor = prompts.get_armor
+  # Class Function to get sessions
+  def self.get_sessions
+    return @@PLAY_SESSIONS
   end
 
   def switch_turn
     @turn = !@turn 
   end
 
-  def valid_game?
-    @player.is_alive? #&& @nemesis.is_alive?
+  def play_intro
+    @prompts.welcome_message(@player)
+    @prompts.map_introduction(@map)
+    @tutorial = false    
   end
 
-  def play_game(game_prompts)
+  def player_turn_cycle
+    @player.print_health
+    @player.takes_damage(20)
+    @turn = false
+  end
 
-    while player.is_alive?
-      @game_prompts = game_prompts
-      @game_prompts.welcome_message(@player)
-      @game_prompts.map_introduction()
-      @map.print_map()
-      @player.takes_damage(50)
+  def opponent_turn_cycle
+    puts "Opponent goes."
+    @turn = true
+  end
 
-      if !player.is_alive?
-        @game_prompts.game_over
+  def opponent_encounter?
+    @battle = true
+  end 
+
+  def battle_sequence
+    if @battle
+      if @turn
+        player_turn_cycle
+        end_game_sequence
+      else
+        opponent_turn_cycle
+        end_game_sequence
+      end   
+    end
+  end 
+
+  def end_game_sequence
+    if !@player.is_alive?
+      @battle = false          
+      @prompts.game_over
+    end
+
+    if @player.nemesis_dead?(false)
+      @battle = false                    
+      @prompts.win_game
+    end
+  end
+
+  def play_game()
+
+    while @player.is_alive?
+
+      # Stage 1 - Introduction
+      if @tutorial
+        play_intro
       end
+
+      # Stage 2A - Movement
+      @player.move_room(@map)
+
+      # Stage 2C - Encounter
+      opponent_encounter?
+
+      # Stage 2B - Battle Sequence
+      battle_sequence
     end
   end
 end
