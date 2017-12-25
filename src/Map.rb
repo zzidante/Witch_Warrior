@@ -36,7 +36,7 @@ class Map
 
   def position_player(player)
     @map[player.y][player.x] = @player_icon
-    make_pretty_map(@map)
+    puts make_pretty_map(@map)
   end
 
   def reset_player_position(player)
@@ -45,19 +45,25 @@ class Map
 
   def valid_move?(player, axis, step)
     if axis == "x"
+      puts "valid: x"
       if player.x + step < 0 || player.x + step > @map_size - 1
+        puts "validX: invalid"
         invalid_move_message()
         return false
       else
+        puts "validX: true"
         reset_player_position(player)        
         return true
       end
     end
     if axis == "y"
+      puts "valid: y"      
       if player.y + step < 0 || player.y + step > @map_size - 1
+        puts "validY: invalid"        
         invalid_move_message()
         return false
       else
+        puts "validY: true"        
         reset_player_position(player)
         return true
       end
@@ -65,7 +71,7 @@ class Map
   end
 
   def invalid_move_message()
-    return "There is a wall there \n" + @show_pretty_map
+    "There is a wall there \n" + @show_pretty_map
   end
 
   public
@@ -94,18 +100,18 @@ class Map
   end
 
   def move_player(player, direction)
+    direction = direction.downcase
     case direction
     when "left", "west"
-      valid_move?(player, "x", -1) ? player.x -= 1 : (return invalid_move_message())
-
+      valid_move?(player, "x", -1) ? player.x -= 1 : invalid_move_message()
     when "right", "east"
-      valid_move?(player, "x", 1) ? player.x += 1 : (return invalid_move_message()) 
-
+      valid_move?(player, "x", 1) ? player.x += 1 : invalid_move_message()
     when "north", "up", "top"
-      valid_move?(player, "y", -1) ? player.y -= 1 : (return invalid_move_message())
-
+      valid_move?(player, "y", -1) ? player.y -= 1 : invalid_move_message()
     when "south", "down", "bottom"
-      valid_move?(player, "y", 1) ? player.y += 1 : (return invalid_move_message())
+      valid_move?(player, "y", 1) ? player.y += 1 : invalid_move_message()
+    else 
+      puts "wrong input"
     end
     position_player(player)
   end

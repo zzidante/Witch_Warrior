@@ -36,8 +36,8 @@ class Player
     puts "Your current health: #{@health}"
   end
 
-  def move_room(map)
-    puts "You have moved rooms. "
+  def move_room(map, direction)
+    map.move_player(self, direction)
   end
 
 end

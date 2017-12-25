@@ -50,7 +50,11 @@ class GameState
   end
 
   def opponent_encounter?
-    @battle = true
+    monster_chance = rand(11)
+    puts monster_chance
+    if monster_chance === 10
+      @battle = true
+    end
   end 
 
   def battle_sequence(opponent)
@@ -73,14 +77,13 @@ class GameState
   end
 
   def play_game()
-
     while @player.is_alive?
 
-      # Stage 1 - Introduction
+      # Stage 1 - Introduction (if tutorial is true, play intro)
       @tutorial && play_intro
 
-      # Stage 2A - Movement
-      @player.move_room(@map)
+      # Stage 2A - Movement (player moves rooms according to player input of direction)
+      @player.move_room(@map, gets.chomp!)
 
       # Stage 2C - Encounter
       opponent_encounter?
