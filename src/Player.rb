@@ -19,6 +19,10 @@ class Player
     @health > 0
   end
 
+  def nemesis_alive?
+    true
+  end
+
   def nemesis_dead?(answer)
       # enemy.health > 0
       answer

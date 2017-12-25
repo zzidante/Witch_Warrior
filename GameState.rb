@@ -35,33 +35,34 @@ class GameState
   end
 
   def player_turn_cycle
+    puts "Player's turn"
     @player.print_health
-    @player.takes_damage(20)
     @turn = false
   end
 
   def opponent_turn_cycle(opponent)
     if opponent == "monster"
-      puts "Opponent goes."
+      puts "Opponent goes."      
+      @player.takes_damage(20)      
     else
-      puts "Nemesis goes"
+      puts "Nemesis goes"      
+      @player.takes_damage(20)      
     end
     @turn = true
   end
 
   def opponent_encounter?
-    monster_chance = rand(11)
-    puts monster_chance
-    if monster_chance === 10
-      @battle = true
+    if rand(3) === 2
+      puts "AHHH! A monster!"
+      return @battle = true
     end
   end 
 
   def battle_sequence(opponent)
-    if @battle
-      @turn ? player_turn_cycle : opponent_turn_cycle(opponent)
-      end_game_sequence                
+    while @player.is_alive? && @player.nemesis_alive?
+      @turn ? player_turn_cycle : opponent_turn_cycle(opponent)            
     end
+    end_game_sequence
   end 
 
   def end_game_sequence
@@ -83,18 +84,19 @@ class GameState
       @tutorial && play_intro
 
       # Stage 2A - Movement (player moves rooms according to player input of direction)
-      @player.move_room(@map, gets.chomp!)
+      puts @player.move_room(@map, gets.chomp!)
 
       # Stage 2C - Encounter
       opponent_encounter?
 
       # Stage 2B - Battle Sequence
-      battle_sequence("monster")
+      if @battle
+        puts "Let's battle!"
+        battle_sequence("monster")
+      end
     end
   end
 end
 
 # Begin Game
 game = GameState.new
-
-

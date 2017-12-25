@@ -6,14 +6,14 @@ class Map
   attr_reader :map, :show_pretty_map
 
   def initialize(player)
-    @player = player
-    @player_icon = "[ P ]"
-    @empty_icon =  "[ O ]"
+    @player =       player
+    @player_icon =  "[ P ]"
+    @empty_icon =   "[ O ]"
     @visited_icon = "[ x ]"
-    @map_size =    3
-    @map =         []
+    @map_size =     3
+    @map =          []
     @show_pretty_map =  ""
-    @make_map =    make_map(@player)
+    @make_map =     make_map(@player)
   end
 
   private 
@@ -36,7 +36,7 @@ class Map
 
   def position_player(player)
     @map[player.y][player.x] = @player_icon
-    puts make_pretty_map(@map)
+    return make_pretty_map(@map)
   end
 
   def reset_player_position(player)
@@ -111,26 +111,27 @@ class Map
     when "south", "down", "bottom"
       valid_move?(player, "y", 1) ? player.y += 1 : invalid_move_message()
     else 
-      puts "wrong input"
+      false
     end
-    position_player(player)
+    return position_player(player)
   end
-
-  def test_simple_move(player, direction)
-    return move_player(player, direction), name_valid_directions(player).join(", ") + "\n"
-  end
-
-  def test_complex_move(player, arr_directions)
-    map_collection = ""
-    arr_directions.each do |dir|
-      map_collection += dir.upcase() + ": " + "\n"
-      map_collection += move_player(player, dir)
-      map_collection += name_valid_directions(player) + "\n" + "\n"
-    end
-    return map_collection + "\n"
-  end
-
 end
+
+  # def test_simple_move(player, direction)
+  #   return move_player(player, direction), name_valid_directions(player).join(", ") + "\n"
+  # end
+
+  # def test_complex_move(player, arr_directions)
+  #   map_collection = ""
+  #   arr_directions.each do |dir|
+  #     map_collection += dir.upcase() + ": " + "\n"
+  #     map_collection += move_player(player, dir)
+  #     map_collection += name_valid_directions(player) + "\n" + "\n"
+  #   end
+  #   return map_collection + "\n"
+  # end
+
+
 
 # For Testing
 
