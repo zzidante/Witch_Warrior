@@ -2,7 +2,7 @@ class Monster
   attr_reader :health, :type, :attack_power
   attr_accessor :user, :name, :weapon, :armor
 
-  BASE_HIT_POINTS = 20
+  BASE_HIT_POINTS = 10
 
   def initialize()
     @health = BASE_HIT_POINTS

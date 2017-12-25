@@ -1,6 +1,8 @@
 require './src/Player.rb'
 require './src/GamePrompt.rb'
 require './src/Map.rb'
+require './src/Monster.rb'
+
 
 class GameState
   @@PLAY_SESSIONS = []
@@ -54,7 +56,8 @@ class GameState
   def opponent_encounter?
     if rand(3) === 2
       puts "AHHH! A monster!"
-      return @battle = true
+      monster = Monster.new
+      @battle = true
     end
   end 
 
