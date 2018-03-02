@@ -19,7 +19,7 @@ class Monster
   end
 
   def print_health
-    puts "Your current health: #{@health}"
+    puts "Monster's current health: #{@health}"
   end
 
 end

@@ -31,7 +31,7 @@ class Map
       @show_pretty_map+= row.each { |x| x }.join("  ")
       @show_pretty_map+= "\n"
     end
-    return @show_pretty_map
+    puts @show_pretty_map
   end
 
   def position_player(player)
@@ -71,7 +71,7 @@ class Map
   end
 
   def invalid_move_message()
-    "There is a wall there \n" + @show_pretty_map
+    puts "There is a wall there \n"
   end
 
   public
@@ -104,39 +104,18 @@ class Map
     case direction
     when "left", "west"
       valid_move?(player, "x", -1) ? player.x -= 1 : invalid_move_message()
+      position_player(player)
     when "right", "east"
       valid_move?(player, "x", 1) ? player.x += 1 : invalid_move_message()
+      position_player(player)
     when "north", "up", "top"
       valid_move?(player, "y", -1) ? player.y -= 1 : invalid_move_message()
+      position_player(player)
     when "south", "down", "bottom"
       valid_move?(player, "y", 1) ? player.y += 1 : invalid_move_message()
+      position_player(player)
     else 
-      false
+      return false
     end
-    return position_player(player)
   end
 end
-
-  # def test_simple_move(player, direction)
-  #   return move_player(player, direction), name_valid_directions(player).join(", ") + "\n"
-  # end
-
-  # def test_complex_move(player, arr_directions)
-  #   map_collection = ""
-  #   arr_directions.each do |dir|
-  #     map_collection += dir.upcase() + ": " + "\n"
-  #     map_collection += move_player(player, dir)
-  #     map_collection += name_valid_directions(player) + "\n" + "\n"
-  #   end
-  #   return map_collection + "\n"
-  # end
-
-
-
-# For Testing
-
-# map = Map.new
-# puts "You are here" + "\n" + map.show_pretty_map + "\n"
-# puts map.test_complex_move(["south", "east", "north", "east", "south", "south", "south", "west"])
-# puts map.test_simple_move("south")
-

@@ -1,7 +1,7 @@
 module Combatable
   BASE_STATS = {
     max_hit_points: 10,
-    attack_power:   1
+    attack_power:   12
   }
 
   def Combatable.included(mod)
@@ -19,13 +19,20 @@ module Combatable
     @hit_points > 0
   end
 
-  def hurt(amount)
-    @hit_points -= amount
+  def takes_damage(dmg = 1, type = nil)
+    if type
+      @health -= dmg * type
+    else 
+      @health -= dmg
+    end
   end
 
   def heal(amount)
     @hit_points += amount
     @hit_points = [@hit_points, @stats[:max_hit_points]].min
   end
-end
+
+  def print_health
+    puts "Your current health: #{@health}"
+  end
 end

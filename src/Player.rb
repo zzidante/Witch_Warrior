@@ -15,17 +15,12 @@ class Player
     @y = 0
   end
 
+  def nemesis_alive?(answer = true)
+    answer
+  end
+
   def is_alive?
     @health > 0
-  end
-
-  def nemesis_alive?
-    true
-  end
-
-  def nemesis_dead?(answer)
-      # enemy.health > 0
-      answer
   end
 
   def takes_damage(dmg = 1, type = nil)
