@@ -33,27 +33,20 @@ class GameState
   def play_intro
     @prompts.welcome_message(@player)
     @prompts.map_introduction(@map)
-    @tutorial = false    
+    @tutorial = false
   end
 
   def player_turn_cycle(opponent)
-    puts "Player's turn"
+    puts "--> Player's turn"
     @player.print_health
+    opponent.takes_damage(5)
     @turn = false
-    if @battle
-      opponent.takes_damage(5)
-    end
   end
 
   def opponent_turn_cycle(opponent)
-    # if opponent == "monster"
-      puts "Opponent goes."
-      opponent.print_health  
-      @player.takes_damage(20)      
-    # else
-    #   puts "Nemesis goes"      
-    #   @player.takes_damage(20)      
-    # end
+    puts "--> Opponent goes."
+    opponent.print_health  
+    @player.takes_damage(20) 
     @turn = true
   end
 
@@ -64,13 +57,28 @@ class GameState
     end
   end 
 
-  def battle_sequence(opponent)
+  def battle_sequence
     @monster = Monster.new
     while @player.is_alive? && @monster.is_alive?
       @turn ? player_turn_cycle(@monster) : opponent_turn_cycle(@monster)            
     end
+    @turn = true # reset player turn regardless of who's turn ended
     end_game_sequence(@monster)
   end 
+
+  def play_again?
+    puts "Play again? -- YES / NO"
+    answer = gets.chomp!.downcase
+
+    case answer
+    when 'yes', 'y'
+      true
+    when 'no', 'n'
+      exit
+    else
+      play_again?
+    end
+  end
 
   def end_game_sequence(opponent)
     if !@player.is_alive?
@@ -82,7 +90,11 @@ class GameState
       @battle = false                    
       @prompts.win_game
     end
-  end
+
+    if play_again?
+      game = GameState.new      
+    end
+  end 
 
   def play_game()
     while @player.is_alive?
@@ -98,11 +110,12 @@ class GameState
         # Stage 4A - Battle Sequence
         if @battle # should be while battle
           puts "Let's battle!"
-          battle_sequence("monster")
+          battle_sequence
         end
       end
       # Stage 5A - Item Pickup
     end
+    exit
   end
 end
 
