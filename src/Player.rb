@@ -1,5 +1,5 @@
 class Player
-  attr_reader :health, :type, :attack_power
+  attr_reader :health, :type, :attack_power, :max_health
   attr_accessor :user, :name, :weapon, :armor, :x, :y
 
   def initialize(collection)
@@ -7,6 +7,7 @@ class Player
     @name = collection[1]
     @weapon = collection[2]
     @armor = collection[3]
+    @max_health = 100
     @health = 100
     @inventory = []
     @attack_power = 1

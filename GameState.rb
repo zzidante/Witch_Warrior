@@ -1,8 +1,8 @@
 require './src/Player.rb'
+require './src/GatherUserInput.rb' # need these things to return things to pass to Player
 require './src/GamePrompt.rb'
 require './src/Map.rb'
 require './src/Monster.rb'
-
 
 class GameState
   @@PLAY_SESSIONS = []
@@ -11,8 +11,9 @@ class GameState
 
   def initialize()
     @@PLAY_SESSIONS << self
+    @user_input = GatherUserInput.new
     @prompts = GamePrompt.new
-    @player = Player.new(@prompts.get_player_info)
+    @player = Player.new(@user_input.get_player_info)
     @map = Map.new(@player)
     @tutorial = true
     @turn = true
@@ -27,18 +28,19 @@ class GameState
   end
 
   def switch_turn
-    @turn = !@turn 
+    @turn = !@turn
   end
 
   def play_intro
-    @prompts.welcome_message(@player)
-    @prompts.map_introduction(@map)
+    @prompts.welcome_message(@player) # put these in same method, just include map.
+    @prompts.map_introduction(@map, @player)
     @tutorial = false
   end
 
   def player_turn_cycle(opponent)
-    puts "--> Player's turn"
-    @player.print_health
+    @prompts.player_cycle(@player)
+    # puts "--> Player's turn"
+    # @player.print_health
     opponent.takes_damage(5)
     @turn = false
   end
@@ -67,7 +69,7 @@ class GameState
   end 
 
   def play_again?
-    puts "Play again? -- YES / NO"
+    @prompts.restart?
     answer = gets.chomp!.downcase
 
     case answer
@@ -83,7 +85,7 @@ class GameState
   def end_game_sequence(opponent)
     if !@player.is_alive?
       @battle = false          
-      @prompts.game_over
+      @prompts.game_over(@player)
     end
 
     if !opponent.is_alive?
