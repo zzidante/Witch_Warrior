@@ -11,13 +11,18 @@ class GameState
 
   def initialize()
     @@PLAY_SESSIONS << self
+
+    # initialize elements
     @user_input = GatherUserInput.new
     @prompts = GamePrompt.new
     @player = Player.new(@user_input.get_player_info)
     @map = Map.new(@player)
+
+    # set state flags
     @tutorial = true
     @turn = true
     @battle = false
+
     #start gameplay
     play_game()
   end
@@ -32,22 +37,18 @@ class GameState
   end
 
   def play_intro
-    @prompts.welcome_message(@player) # put these in same method, just include map.
-    @prompts.map_introduction(@map, @player)
+    @prompts.play_introduction(@map, @player)
     @tutorial = false
   end
 
   def player_turn_cycle(opponent)
     @prompts.player_cycle(@player)
-    # puts "--> Player's turn"
-    # @player.print_health
     opponent.takes_damage(5)
     @turn = false
   end
 
   def opponent_turn_cycle(opponent)
-    puts "--> Opponent goes."
-    opponent.print_health  
+    @prompts.opponent_cycle(opponent)
     @player.takes_damage(20) 
     @turn = true
   end

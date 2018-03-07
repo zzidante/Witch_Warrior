@@ -1,11 +1,12 @@
 class Monster
-  attr_reader :health, :type, :attack_power
+  attr_reader :health, :type, :attack_power, :max_health
   attr_accessor :user, :name, :weapon, :armor
 
   BASE_HIT_POINTS = 10
 
   def initialize()
     @health = BASE_HIT_POINTS
+    @max_health = BASE_HIT_POINTS
     @attack_power = 1
     @type = ['Ice', 'Fire', 'Green'].sample
   end
@@ -17,9 +18,4 @@ class Monster
   def takes_damage(dmg = 1, type = nil)
     @health -= dmg
   end
-
-  def print_health
-    puts "Monster's current health: #{@health}"
-  end
-
 end

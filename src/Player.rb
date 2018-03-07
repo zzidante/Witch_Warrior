@@ -39,5 +39,4 @@ class Player
   def move_room(map, direction)
     map.move_player(self, direction)
   end
-
 end
